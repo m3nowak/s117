@@ -93,36 +93,49 @@ begin
      end;
    end;
      
- { for v:=1 to 9 do
+  for v:=1 to 9 do
    for w:=1 to 9 do begin
     b:=0;
     for x:=1 to 9 do
      for y:=1 to 9 do
-      if (a[x][y][w]) and ((v mod 3)=(x div 3)) and ((v div 3)=(y div 3)) then inc(b);
+      if (a[x][y][w]) and (((v-1) mod 3)=((x-1) div 3)) and (((v-1) div 3)=((y-1) div 3)) then inc(b);
     if b=1 then
      for x:=1 to 9 do
       for y:=1 to 9 do
-       if (a[x][y][w]) and ((v mod 3)=(x div 3)) and ((v div 3)=(y div 3)) then begin
+       if (a[x][y][w]) and (((v-1) mod 3)=((x-1) div 3)) and (((v-1) div 3)=((y-1) div 3)) then begin
         for p0:=1 to 9 do a[x][y][p0]:=false;
         a[x][y][w]:=true;
         d[x][y]:=w;
        end;
-   end;}
+   end;
    
  end; 
   
 end;
 
+ 
+ 
 function spr:boolean;
 var spr0:boolean;
+
+procedure gam;
+begin
+ gotoxy(22+2*x,2+2*y);
+ spr0:=false;
+ textbackground(4);
+ write(d[x][y]);
+ gotoxy(30,23);
+ textbackground(0);
+end;
+
 begin
  spr0:=true;
  for x:=1 to 9 do
   for y:=1 to 9 do begin
-   for w:=1 to 9 do if (d[x][y]=d[x][w]) and (d[x][y]<>0) and (y<>w) then spr0:=false;
-   for w:=1 to 9 do if (d[x][y]=d[w][y]) and (d[x][y]<>0) and (x<>w) then spr0:=false;
+   for w:=1 to 9 do if (d[x][y]=d[x][w]) and (d[x][y]<>0) and (y<>w) then gam;
+   for w:=1 to 9 do if (d[x][y]=d[w][y]) and (d[x][y]<>0) and (x<>w) then gam;
    for w:=1 to 9 do
-    for v:=1 to 9 do if (d[x][y]=d[w][v]) and (d[x][y]<>0) and ((x div 3) = (w div 3)) and ((y div 3) = (v div 3)) and ((x<>w) and (y<>v)) then spr0:=false;
+    for v:=1 to 9 do if (d[x][y]=d[w][v]) and (d[x][y]<>0) and (((x-1) div 3) = ((w-1) div 3)) and (((y-1)div 3) = ((v-1) div 3)) and ((x<>w) and (y<>v)) then gam;
   end;
  spr:=spr0;
 
@@ -186,7 +199,7 @@ begin
  end;
  gotoxy(44,4);
  Write('ESC - Koniec');
- gotoxy(44,5);
+ gotoxy(44,5);                        
  Write('ENT - Przelicz');
  gotoxy(44,6);
  Write('Strzalki - Kursor');
@@ -195,7 +208,7 @@ begin
  gotoxy(44,8);
  Write('0 - Usun wartosc');
  gotoxy(44,9);
- Write('HOME - Usun wszystko');
+ Write('HOME - Usun cale wejscie');
  gotoxy(44,10);
  Write('TAB - Przelicz + Pokaz mozliwe liczby');
  gotoxy(44,11);
@@ -307,6 +320,8 @@ begin
     if d[x,y]=0 then write(' ')
                 else write(d[x,y]);
    end;
+  gotoxy(30,23);
+  write('     ');
   gotoxy(1,1);
   end;
  
@@ -318,6 +333,8 @@ begin
      write(' ');
      c[x,y]:=0;
     end;
+   gotoxy(30,23);
+   write('     ');
    gotoxy(2*p,2+2*q);
    TextBackground(1);
    write(' ');
